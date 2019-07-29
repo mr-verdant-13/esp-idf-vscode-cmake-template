@@ -1,0 +1,94 @@
+{
+    "version": "2.0.0",
+    "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": true
+    },
+    "tasks": [
+        {
+            "label": "Menuconfig",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& scripts\\Menuconfig.bat & exit"
+            }
+        },
+        {
+            "label": "Build test",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& set \"testNumber=${input:testNumber}\" & scripts\\BuildTest.bat & exit"
+            }
+        },
+        {
+            "label": "Flash",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py -p ${input:serialPort} flash & exit"
+            }
+        },
+        {
+            "label": "Monitor",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py -p ${input:serialPort} monitor & exit"
+            }
+        },
+        {
+            "label": "Flash & Monitor",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py -p ${input:serialPort} flash monitor & exit"
+            }
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py clean & exit"
+            }
+        },
+        {
+            "label": "Create new component",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& set \"componentName=${input:componentName}\" & scripts\\CreateNewComponent.bat & exit"
+            }
+        },
+        {
+            "label": "Remove auto-generated files",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& scripts\\RemoveAutogen.bat & exit"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "testNumber",
+            "type": "promptString",
+            "description": "Test number to be used"
+        },
+        {
+            "id": "serialPort",
+            "type": "promptString",
+            "description": "Serial port name to be used"
+        },
+        {
+            "id": "componentName",
+            "type": "promptString",
+            "description": "New component name"
+        }
+    ]
+}
