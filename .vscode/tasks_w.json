@@ -18,12 +18,46 @@
             }
         },
         {
+            "label": "Generate test list",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "isBackground": true,
+            "type": "shell",
+            "windows": {
+                "command": "& scripts\\GenerateTestList.bat & exit"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Build test",
             "type": "shell",
             "problemMatcher": [],
             "windows": {
-                "command": "& set \"testNumber=${input:testNumber}\" & scripts\\BuildTest.bat & exit"
-            }
+                "command": "& set \"testFile=${input:testFile}\" & scripts\\BuildTest.bat & exit"
+            },
+            "dependsOn":[
+                "Generate test list"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "Generate COM list",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "isBackground": true,
+            "type": "shell",
+            "windows": {
+                "command": "& scripts\\GenerateComList.bat & exit"
+            },
+            "problemMatcher": []
         },
         {
             "label": "Flash",
@@ -31,7 +65,11 @@
             "problemMatcher": [],
             "windows": {
                 "command": "& idf.py -p ${input:serialPort} flash & exit"
-            }
+            },
+            "dependsOn":[
+                "Generate COM list"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "Monitor",
@@ -39,7 +77,11 @@
             "problemMatcher": [],
             "windows": {
                 "command": "& idf.py -p ${input:serialPort} monitor & exit"
-            }
+            },
+            "dependsOn":[
+                "Generate COM list"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "Flash & Monitor",
@@ -47,7 +89,11 @@
             "problemMatcher": [],
             "windows": {
                 "command": "& idf.py -p ${input:serialPort} flash monitor & exit"
-            }
+            },
+            "dependsOn":[
+                "Generate COM list"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "Clean",
@@ -76,14 +122,18 @@
     ],
     "inputs": [
         {
-            "id": "testNumber",
-            "type": "promptString",
-            "description": "Test number to be used"
+            "type": "pickString",
+            "description": "Test to be used",
+            "id": "testFile",
+			"options": [
+            ]
         },
         {
+            "type": "pickString",
+            "description": "Serial port name to be used",
             "id": "serialPort",
-            "type": "promptString",
-            "description": "Serial port name to be used"
+            "options": [
+            ]
         },
         {
             "id": "componentName",
