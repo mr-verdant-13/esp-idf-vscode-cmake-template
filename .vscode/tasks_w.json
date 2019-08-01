@@ -1,0 +1,144 @@
+{
+    "version": "2.0.0",
+    "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": true
+    },
+    "tasks": [
+        {
+            "label": "Menuconfig",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& scripts\\Menuconfig.bat & exit"
+            }
+        },
+        {
+            "label": "Generate test list",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "isBackground": true,
+            "type": "shell",
+            "windows": {
+                "command": "& scripts\\GenerateTestList.bat & exit"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build test",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& set \"testFile=${input:testFile}\" & scripts\\BuildTest.bat & exit"
+            },
+            "dependsOn":[
+                "Generate test list"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "Generate COM list",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "isBackground": true,
+            "type": "shell",
+            "windows": {
+                "command": "& scripts\\GenerateComList.bat & exit"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Flash",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py -p ${input:serialPort} flash & exit"
+            },
+            "dependsOn":[
+                "Generate COM list"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "Monitor",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py -p ${input:serialPort} monitor & exit"
+            },
+            "dependsOn":[
+                "Generate COM list"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "Flash & Monitor",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py -p ${input:serialPort} flash monitor & exit"
+            },
+            "dependsOn":[
+                "Generate COM list"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& idf.py clean & exit"
+            }
+        },
+        {
+            "label": "Create new component",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& set \"componentName=${input:componentName}\" & scripts\\CreateNewComponent.bat & exit"
+            }
+        },
+        {
+            "label": "Remove auto-generated files",
+            "type": "shell",
+            "problemMatcher": [],
+            "windows": {
+                "command": "& scripts\\RemoveAutogen.bat & exit"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "description": "Test to be used",
+            "id": "testFile",
+			"options": [
+            ]
+        },
+        {
+            "type": "pickString",
+            "description": "Serial port name to be used",
+            "id": "serialPort",
+            "options": [
+            ]
+        },
+        {
+            "id": "componentName",
+            "type": "promptString",
+            "description": "New component name"
+        }
+    ]
+}
